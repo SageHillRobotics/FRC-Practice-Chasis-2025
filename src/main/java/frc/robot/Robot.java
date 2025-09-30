@@ -4,7 +4,13 @@
 
 package frc.robot;
 
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import java.util.ArrayList;
+import com.revrobotics.spark.SparkMax;
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -14,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * this project, you must also update the Main.java file in the project.
  */
 public class Robot extends TimedRobot {
+  private ArrayList<SparkMax> motors = new ArrayList<>();
+
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
@@ -23,6 +31,10 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   public Robot() {
+    for (int i = 1; i <= 8; i++) {
+      motors.add(new SparkMax(i, MotorType.kBrushless));
+    }
+
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -68,6 +80,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    Timer timer = new Timer();
+    timer.start();
+    motors.forEach(motor -> motor.set(0.5));
+    while (timer.get() < 10) {
+      // wait
+    }
+    motors.forEach(motor -> motor.set(0.0));
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

@@ -12,12 +12,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 
 public class RobotContainer {
   // Subsystems
-  private final DriveSubsystem m_drive = new DriveSubsystem();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   // Controllers
@@ -26,10 +24,6 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Default command for driving: left stick Y = forward/back, right stick X = turn
-    m_drive.setDefaultCommand(
-        new RunCommand(
-            () -> m_drive.arcade(-m_controller.getLeftY(), m_controller.getRightX()),
-            m_drive));
 
     // Configure any button/trigger bindings
     configureBindings();
