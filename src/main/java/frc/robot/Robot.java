@@ -7,10 +7,13 @@ package frc.robot;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
+
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -20,7 +23,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * this project, you must also update the Main.java file in the project.
  */
 public class Robot extends TimedRobot {
-  private ArrayList<SparkMax> motors = new ArrayList<>();
+  private XboxController driveController;
+  private ArrayList<SparkMax> motors;
 
   private Command m_autonomousCommand;
 
@@ -31,6 +35,9 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   public Robot() {
+    driveController = new XboxController(0);
+
+    motors = new ArrayList<SparkMax>();
     for (int i = 1; i <= 8; i++) {
       motors.add(new SparkMax(i, MotorType.kBrushless));
     }
@@ -82,11 +89,15 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     Timer timer = new Timer();
     timer.start();
-    motors.forEach(motor -> motor.set(0.5));
-    while (timer.get() < 10) {
-      // wait
-    }
-    motors.forEach(motor -> motor.set(0.0));
+    motors.forEach(new Consumer<SparkMax>() {
+      @Override
+      public void accept(SparkMax motor) {
+        System.out.println("Testing motor ID: " + motor.getDeviceId());
+        motor.set(0.5);
+        while (!driveController.getAButtonPressed());
+        motor.set(0.0);
+      }
+    });
 
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
