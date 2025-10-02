@@ -21,4 +21,8 @@ public class SwerveModule {
         driveEncoder.setPosition(0);
         angleEncoder.setPosition(0);
     }
+
+    public int getAngleDegrees() {
+        return (int) (angleEncoder.getPosition() * 360) % 360;
+    }
 }

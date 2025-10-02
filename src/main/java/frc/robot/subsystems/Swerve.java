@@ -29,9 +29,9 @@ public class Swerve {
     }
 
     public void logEncoders() {
-        System.out.println("FL Drive: " + FL.driveEncoder.getPosition() + " Angle: " + FL.angleEncoder.getPosition());
-        System.out.println("FR Drive: " + FR.driveEncoder.getPosition() + " Angle: " + FR.angleEncoder.getPosition());
-        System.out.println("BL Drive: " + BL.driveEncoder.getPosition() + " Angle: " + BL.angleEncoder.getPosition());
-        System.out.println("BR Drive: " + BR.driveEncoder.getPosition() + " Angle: " + BR.angleEncoder.getPosition());
+        System.out.println("FL Drive: " + FL.driveEncoder.getPosition() + " Angle: " + FL.getAngleDegrees());
+        System.out.println("FR Drive: " + FR.driveEncoder.getPosition() + " Angle: " + FR.getAngleDegrees());
+        System.out.println("BL Drive: " + BL.driveEncoder.getPosition() + " Angle: " + BL.getAngleDegrees());
+        System.out.println("BR Drive: " + BR.driveEncoder.getPosition() + " Angle: " + BR.getAngleDegrees());
     }
 }
