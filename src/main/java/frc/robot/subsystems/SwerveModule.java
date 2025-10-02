@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
@@ -16,7 +17,7 @@ public class SwerveModule {
     public double distance;
     public int angle;
 
-    public SwerveModule(int driveMotorId, int angleMotorId) {
+    public SwerveModule(int driveMotorId, int angleMotorId, int canCoderId) {
         driveMotor = new SparkMax(driveMotorId, MotorType.kBrushless);
         angleMotor = new SparkMax(angleMotorId, MotorType.kBrushless);
 
@@ -25,6 +26,9 @@ public class SwerveModule {
 
         driveEncoder.setPosition(0);
         angleEncoder.setPosition(0);
+
+        canCoder = new CANcoder(canCoderId);
+
     }
 
     public void updateValues() {
