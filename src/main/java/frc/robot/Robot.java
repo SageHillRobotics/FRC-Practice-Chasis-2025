@@ -73,6 +73,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     m_swerve.move(m_controller.getLeftX(), m_controller.getRightY());
+    m_swerve.logEncoders();
   }
 
   @Override
