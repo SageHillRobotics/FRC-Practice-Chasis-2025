@@ -14,6 +14,9 @@ public class Swerve {
     }
 
     public void move(double xSpeed, double ySpeed) {
+        xSpeed /= 2;
+        ySpeed /= 2;
+        
         FL.driveMotor.set(ySpeed);
         FR.driveMotor.set(ySpeed);
         BL.driveMotor.set(ySpeed);
