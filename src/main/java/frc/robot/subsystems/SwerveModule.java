@@ -11,6 +11,9 @@ public class SwerveModule {
     public RelativeEncoder driveEncoder;
     public RelativeEncoder angleEncoder;
 
+    public double distance;
+    public int angle;
+
     public SwerveModule(int driveMotorId, int angleMotorId) {
         driveMotor = new SparkMax(driveMotorId, MotorType.kBrushless);
         angleMotor = new SparkMax(angleMotorId, MotorType.kBrushless);
@@ -22,7 +25,19 @@ public class SwerveModule {
         angleEncoder.setPosition(0);
     }
 
-    public int getAngleDegrees() {
-        return (int) (angleEncoder.getPosition() * 360) % 360;
+    public void updateValues() {
+        distance = driveEncoder.getPosition();
+        angle = (int) (angleEncoder.getPosition() * 360) % 360;
+        if (angle < 0) {
+            angle += 360;
+        }
+    }
+
+    public void setAngleDegrees(int degrees) {
+        while (angle != degrees) {
+            angleMotor.set(0.1);
+            updateValues();
+        }
+        angleMotor.set(0);
     }
 }

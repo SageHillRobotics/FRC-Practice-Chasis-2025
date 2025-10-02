@@ -13,6 +13,13 @@ public class Swerve {
         BR = new SwerveModule(ids[6], ids[7]);
     }
 
+    public void updateValues() {
+        FL.updateValues();
+        FR.updateValues();
+        BL.updateValues();
+        BR.updateValues();
+    }
+
     public void move(double xSpeed, double ySpeed) {
         xSpeed /= 2;
         ySpeed /= 2;
@@ -26,12 +33,14 @@ public class Swerve {
         FR.angleMotor.set(xSpeed);
         BL.angleMotor.set(xSpeed);
         BR.angleMotor.set(xSpeed);
+
+        updateValues();
     }
 
     public void logEncoders() {
-        System.out.println("FL Drive: " + FL.driveEncoder.getPosition() + " Angle: " + FL.getAngleDegrees());
-        System.out.println("FR Drive: " + FR.driveEncoder.getPosition() + " Angle: " + FR.getAngleDegrees());
-        System.out.println("BL Drive: " + BL.driveEncoder.getPosition() + " Angle: " + BL.getAngleDegrees());
-        System.out.println("BR Drive: " + BR.driveEncoder.getPosition() + " Angle: " + BR.getAngleDegrees());
+        System.out.println("FL Distance: " + FL.distance + " Angle: " + FL.angle);
+        System.out.println("FR Distance: " + FR.distance + " Angle: " + FR.angle);
+        System.out.println("BL Distance: " + BL.distance + " Angle: " + BL.angle);
+        System.out.println("BR Distance: " + BR.distance + " Angle: " + BR.angle);
     }
 }
