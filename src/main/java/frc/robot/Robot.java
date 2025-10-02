@@ -67,6 +67,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    testMotors();
   }
 
   @Override
@@ -75,7 +76,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    testMotors();
   }
 
   @Override
