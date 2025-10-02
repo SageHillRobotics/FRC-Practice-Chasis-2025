@@ -11,6 +11,8 @@ public class SwerveModule {
     public RelativeEncoder driveEncoder;
     public RelativeEncoder angleEncoder;
 
+    public CANcoder canCoder;
+
     public double distance;
     public int angle;
 
