@@ -44,8 +44,6 @@ public class Robot extends TimedRobot {
     m_swerve.BR.angleMotor.set(0);
   }
 
-  public void motor
-
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
@@ -66,12 +64,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    m_swerve.logEncoders();
-    boolean inProgress = true;
-    inProgress = !m_swerve.stepDistance(2);
-    if (inProgress) return;
-    inProgress = !m_swerve.stepAngleDegrees(90);
-    if (inProgress) return;
+    // m_swerve.logEncoders();
+    // boolean inProgress = true;
+    // inProgress = !m_swerve.stepDistance(2);
+    // if (inProgress) return;
+    // inProgress = !m_swerve.stepAngleDegrees(90);
+    // if (inProgress) return;
   }
 
   @Override
