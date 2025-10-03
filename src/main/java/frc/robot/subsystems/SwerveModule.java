@@ -33,11 +33,19 @@ public class SwerveModule {
         }
     }
 
-    public void setAngleDegrees(int degrees) {
-        while (angle != degrees) {
-            angleMotor.set(0.1);
-            updateValues();
-        }
+    public boolean stepAngleDegrees(int goal) {
+        if (angle == goal) return true;
+        angleMotor.set(0.1);
+        updateValues();
         angleMotor.set(0);
+        return false;
+    }
+
+    public boolean stepDistance(double goal) {
+        if (distance >= goal) return true;
+        driveMotor.set(0.5);
+        updateValues();
+        driveMotor.set(0);
+        return false;
     }
 }

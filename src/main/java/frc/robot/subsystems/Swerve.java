@@ -37,6 +37,22 @@ public class Swerve {
         updateValues();
     }
 
+    public boolean stepAngleDegrees(int goal) {
+        boolean fl = FL.stepAngleDegrees(goal);
+        boolean fr = FR.stepAngleDegrees(goal);
+        boolean bl = BL.stepAngleDegrees(goal);
+        boolean br = BR.stepAngleDegrees(goal);
+        return fl && fr && bl && br;
+    }
+
+    public boolean stepDistance(double goal) {
+        boolean fl = FL.stepDistance(goal);
+        boolean fr = FR.stepDistance(goal);
+        boolean bl = BL.stepDistance(goal);
+        boolean br = BR.stepDistance(goal);
+        return fl && fr && bl && br;
+    }
+
     public void logEncoders() {
         System.out.println("FL Distance: " + FL.distance + " Angle: " + FL.angle);
         System.out.println("FR Distance: " + FR.distance + " Angle: " + FR.angle);
