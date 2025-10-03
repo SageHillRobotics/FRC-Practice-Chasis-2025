@@ -23,12 +23,10 @@ public class SwerveModule {
 
         driveEncoder = driveMotor.getEncoder();
         angleEncoder = angleMotor.getEncoder();
-
         driveEncoder.setPosition(0);
         angleEncoder.setPosition(0);
 
         canCoder = new CANcoder(canCoderId);
-
     }
 
     public void updateValues() {
@@ -39,8 +37,8 @@ public class SwerveModule {
         }
     }
 
-    public void setAngleDegrees(int degrees) {
-        while (angle != degrees) {
+    public void setAngleDegrees(int goal) {
+        while (angle != goal) {
             angleMotor.set(0.1);
             updateValues();
         }
