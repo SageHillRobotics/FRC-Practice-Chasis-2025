@@ -19,29 +19,17 @@ public class Robot extends TimedRobot {
 
   public void testMotors() {
     m_swerve.FL.driveMotor.set(0.5);
-    Timer.delay(5);
+    Timer.delay(10);
     m_swerve.FL.driveMotor.set(0);
     m_swerve.FR.driveMotor.set(0.5);
-    Timer.delay(5);
+    Timer.delay(10);
     m_swerve.FR.driveMotor.set(0);
     m_swerve.BL.driveMotor.set(0.5);
-    Timer.delay(5);
+    Timer.delay(10);
     m_swerve.BL.driveMotor.set(0);
     m_swerve.BR.driveMotor.set(0.5);
-    Timer.delay(5);
+    Timer.delay(10);
     m_swerve.BR.driveMotor.set(0);
-    m_swerve.FL.angleMotor.set(0.5);
-    Timer.delay(5);
-    m_swerve.FL.angleMotor.set(0);
-    m_swerve.FR.angleMotor.set(0.5);
-    Timer.delay(5);
-    m_swerve.FR.angleMotor.set(0);
-    m_swerve.BL.angleMotor.set(0.5);
-    Timer.delay(5);
-    m_swerve.BL.angleMotor.set(0);
-    m_swerve.BR.angleMotor.set(0.5);
-    Timer.delay(5);
-    m_swerve.BR.angleMotor.set(0);
   }
 
   @Override
