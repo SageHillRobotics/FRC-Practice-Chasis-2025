@@ -37,12 +37,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    // m_swerve.logEncoders();
-    // boolean inProgress = true;
-    // inProgress = !m_swerve.stepDistance(2);
-    // if (inProgress) return;
-    // inProgress = !m_swerve.stepAngleDegrees(90);
-    // if (inProgress) return;
+
   }
 
   @Override
@@ -51,7 +46,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    m_swerve.move(m_controller.getLeftX(), m_controller.getRightY());
+    String motor = "ALL";
+    if (m_controller.getLeftBumperButton()) motor = "FL";
+    if (m_controller.getRightBumperButton()) motor = "FR";
+    if (m_controller.getLeftTriggerAxis() > 0.8) motor = "BL";
+    if (m_controller.getRightTriggerAxis() > 0.8) motor = "BR";
+    m_swerve.move(m_controller.getLeftX(), m_controller.getRightY(), motor);
     m_swerve.logEncoders();
   }
 

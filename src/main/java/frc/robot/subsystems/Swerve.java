@@ -20,19 +20,19 @@ public class Swerve {
         BR.updateValues();
     }
 
-    public void move(double xSpeed, double ySpeed) {
+    public void move(double xSpeed, double ySpeed, String motor) {
         xSpeed /= 2;
         ySpeed /= 2;
-        
-        FL.driveMotor.set(ySpeed);
-        FR.driveMotor.set(ySpeed);
-        BL.driveMotor.set(ySpeed);
-        BR.driveMotor.set(ySpeed);
 
-        FL.angleMotor.set(xSpeed);
-        FR.angleMotor.set(xSpeed);
-        BL.angleMotor.set(xSpeed);
-        BR.angleMotor.set(xSpeed);
+        if (motor == "FL" || motor == "ALL") FL.driveMotor.set(ySpeed);
+        if (motor == "FR" || motor == "ALL") FR.driveMotor.set(ySpeed);
+        if (motor == "BL" || motor == "ALL") BL.driveMotor.set(ySpeed);
+        if (motor == "BR" || motor == "ALL") BR.driveMotor.set(ySpeed);
+
+        if (motor == "FL" || motor == "ALL") FL.angleMotor.set(xSpeed);
+        if (motor == "FR" || motor == "ALL") FR.angleMotor.set(xSpeed);
+        if (motor == "BL" || motor == "ALL") BL.angleMotor.set(xSpeed);
+        if (motor == "BR" || motor == "ALL") BR.angleMotor.set(xSpeed);
 
         updateValues();
     }
