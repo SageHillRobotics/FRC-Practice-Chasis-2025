@@ -17,21 +17,6 @@ public class Robot extends TimedRobot {
     m_controller = new XboxController(0);
   }
 
-  public void testMotors() {
-    m_swerve.FL.driveMotor.set(0.5);
-    Timer.delay(10);
-    m_swerve.FL.driveMotor.set(0);
-    m_swerve.FR.driveMotor.set(0.5);
-    Timer.delay(10);
-    m_swerve.FR.driveMotor.set(0);
-    m_swerve.BL.driveMotor.set(0.5);
-    Timer.delay(10);
-    m_swerve.BL.driveMotor.set(0);
-    m_swerve.BR.driveMotor.set(0.5);
-    Timer.delay(10);
-    m_swerve.BR.driveMotor.set(0);
-  }
-
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
@@ -47,7 +32,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    testMotors();
+    
   }
 
   @Override
