@@ -6,7 +6,7 @@ public class Swerve {
     public SwerveModule BL;
     public SwerveModule BR;
 
-    public Swerve(int... ids) {
+    public Swerve(int[] ids) {
         FL = new SwerveModule(ids[0], ids[1]);
         FR = new SwerveModule(ids[2], ids[3]);
         BL = new SwerveModule(ids[4], ids[5]);
@@ -18,6 +18,17 @@ public class Swerve {
         FR.updateValues();
         BL.updateValues();
         BR.updateValues();
+    }
+
+    public void resetEncoders() {
+        FL.driveEncoder.setPosition(0);
+        FL.angleEncoder.setPosition(0);
+        FR.driveEncoder.setPosition(0);
+        FR.angleEncoder.setPosition(0);
+        BL.driveEncoder.setPosition(0);
+        BL.angleEncoder.setPosition(0);
+        BR.driveEncoder.setPosition(0);
+        BR.angleEncoder.setPosition(0);
     }
 
     public void move(double xSpeed, double ySpeed, String motor) {

@@ -12,7 +12,7 @@ public class SwerveModule {
     public RelativeEncoder angleEncoder;
 
     public double distance;
-    public int angle;
+    public double angle;
 
     public SwerveModule(int driveMotorId, int angleMotorId) {
         driveMotor = new SparkMax(driveMotorId, MotorType.kBrushless);
@@ -27,9 +27,6 @@ public class SwerveModule {
 
     public void updateValues() {
         distance = driveEncoder.getPosition();
-        angle = (int) (angleEncoder.getPosition() * 360) % 360;
-        if (angle < 0) {
-            angle += 360;
-        }
+        angle = angleEncoder.getPosition();
     }
 }
