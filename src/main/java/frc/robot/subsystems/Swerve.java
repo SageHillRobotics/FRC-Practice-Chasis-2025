@@ -31,27 +31,24 @@ public class Swerve {
         BR.angleEncoder.setPosition(0);
     }
 
-    public void move(double xSpeed, double ySpeed, String motor) {
-        xSpeed /= 2;
-        ySpeed /= 2;
+    public void move(double x, double y, String motor) {
+        int targetAngle = (int) Math.round(x * 360) % 360;
+        if (targetAngle < 0) {
+            targetAngle += 360;
+        }
 
-        if (motor == "FL" || motor == "ALL") FL.driveMotor.set(ySpeed);
-        if (motor == "FR" || motor == "ALL") FR.driveMotor.set(ySpeed);
-        if (motor == "BL" || motor == "ALL") BL.driveMotor.set(ySpeed);
-        if (motor == "BR" || motor == "ALL") BR.driveMotor.set(ySpeed);
-
-        if (motor == "FL" || motor == "ALL") FL.angleMotor.set(xSpeed);
-        if (motor == "FR" || motor == "ALL") FR.angleMotor.set(xSpeed);
-        if (motor == "BL" || motor == "ALL") BL.angleMotor.set(xSpeed);
-        if (motor == "BR" || motor == "ALL") BR.angleMotor.set(xSpeed);
+        if (motor.equals("FL") || motor.equals("ALL")) FL.move(FL.distanceMeters + y, targetAngle);
+        if (motor.equals("FR") || motor.equals("ALL")) FR.move(FR.distanceMeters + y, targetAngle);
+        if (motor.equals("BL") || motor.equals("ALL")) BL.move(BL.distanceMeters + y, targetAngle);
+        if (motor.equals("BR") || motor.equals("ALL")) BR.move(BR.distanceMeters + y, targetAngle);
 
         updateValues();
     }
 
     public void logEncoders() {
-        System.out.println("FL Distance: " + FL.distance + " Angle: " + FL.angle);
-        System.out.println("FR Distance: " + FR.distance + " Angle: " + FR.angle);
-        System.out.println("BL Distance: " + BL.distance + " Angle: " + BL.angle);
-        System.out.println("BR Distance: " + BR.distance + " Angle: " + BR.angle);
+        System.out.println("FL Distance: " + FL.distanceMeters + "m, Angle: " + FL.angleDegrees + "°");
+        System.out.println("FR Distance: " + FR.distanceMeters + "m, Angle: " + FR.angleDegrees + "°");
+        System.out.println("BL Distance: " + BL.distanceMeters + "m, Angle: " + BL.angleDegrees + "°");
+        System.out.println("BR Distance: " + BR.distanceMeters + "m, Angle: " + BR.angleDegrees + "°");
     }
 }
