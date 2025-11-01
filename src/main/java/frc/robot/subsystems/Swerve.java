@@ -32,15 +32,16 @@ public class Swerve {
     }
 
     public void move(double x, double y, String motor) {
-        int targetAngle = (int) Math.round(x * 360) % 360;
+        int targetAngle = (int) Math.toDegrees(Math.atan2(y, x));
         if (targetAngle < 0) {
             targetAngle += 360;
         }
+        double targetDistance = Math.sqrt(x * x + y * y);
 
-        if (motor.equals("FL") || motor.equals("ALL")) FL.move(FL.distanceMeters + y, targetAngle);
-        if (motor.equals("FR") || motor.equals("ALL")) FR.move(FR.distanceMeters + y, targetAngle);
-        if (motor.equals("BL") || motor.equals("ALL")) BL.move(BL.distanceMeters + y, targetAngle);
-        if (motor.equals("BR") || motor.equals("ALL")) BR.move(BR.distanceMeters + y, targetAngle);
+        if (motor.equals("FL") || motor.equals("ALL")) FL.move(FL.distanceMeters + targetDistance, targetAngle);
+        if (motor.equals("FR") || motor.equals("ALL")) FR.move(FR.distanceMeters + targetDistance, targetAngle);
+        if (motor.equals("BL") || motor.equals("ALL")) BL.move(BL.distanceMeters + targetDistance, targetAngle);
+        if (motor.equals("BR") || motor.equals("ALL")) BR.move(BR.distanceMeters + targetDistance, targetAngle);
 
         updateValues();
     }
