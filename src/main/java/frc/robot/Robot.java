@@ -4,8 +4,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.SwerveDrive;
 
 public class Robot extends TimedRobot {
+  private SwerveDrive m_swerveDrive = new SwerveDrive();
   private XboxController m_controller = new XboxController(0);
   private Timer m_timer = new Timer();
 
@@ -40,7 +42,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    
+    double x1 = -m_controller.getLeftY(); // Forward/backward
+    double y1 = -m_controller.getLeftX(); // Left/right
+    double x2 = -m_controller.getRightX(); // Rotation
+
+    m_swerveDrive.drive(x1, y1, x2);
   }
 
   @Override
