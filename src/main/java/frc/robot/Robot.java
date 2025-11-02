@@ -42,10 +42,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if (m_controller.getXButton()) {
-      m_swerve.resetEncoders();
-    }
-
     String motor = "ALL";
     if (m_controller.getLeftBumperButton()) motor = "FL";
     if (m_controller.getRightBumperButton()) motor = "FR";
