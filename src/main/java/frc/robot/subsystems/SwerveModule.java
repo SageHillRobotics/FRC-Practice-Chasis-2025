@@ -9,7 +9,7 @@ import edu.wpi.first.math.controller.PIDController;
 public class SwerveModule {
     public static final double DRIVE_GEAR_RATIO = 8.14; // L1 Gear Ratio, TODO: Update DRIVE_GEAR_RATIO to Correct Value
     public static final double WHEEL_DIAMETER_INCHES = 4;
-    public static final double ANGLE_GEAR_RATIO = 150 / 7;
+    public static final double ANGLE_GEAR_RATIO = 150.0 / 7.0;
 
     public SparkMax driveMotor;
     public SparkMax angleMotor;
@@ -17,8 +17,8 @@ public class SwerveModule {
     public RelativeEncoder driveEncoder;
     public RelativeEncoder angleEncoder;
 
-    public PIDController drivePID = new PIDController(0.1, 0, 0);
-    public PIDController anglePID = new PIDController(0.1, 0, 0);
+    public PIDController drivePID;
+    public PIDController anglePID;
 
     public double distanceMeters;
     public int angleDegrees;
@@ -32,23 +32,25 @@ public class SwerveModule {
 
         driveEncoder.setPosition(0);
         angleEncoder.setPosition(0);
+
+        drivePID = new PIDController(0.1, 0, 0);
+        anglePID = new PIDController(0.1, 0, 0);
     }
 
-    public void move(double targetDistance, int targetAngle) {
-        updateValues();
+   public void move(double driveSpeed, double targetAngle) {
+    updateValues();
 
-        double driveOutput = drivePID.calculate(distanceMeters, targetDistance);
-        double angleError = (targetAngle - angleDegrees + 180) % 360 - 180;
-        double angleOutput = anglePID.calculate(angleError, 0);
+    double angleError = (targetAngle - angleDegrees + 540) % 360 - 180;
+    double angleOutput = anglePID.calculate(angleError, 0);
+    angleOutput = Math.max(-1, Math.min(1, angleOutput));
+    driveMotor.set(Math.max(-1, Math.min(1, driveSpeed)));
+    angleMotor.set(angleOutput);
 
-        driveMotor.set(driveOutput);
-        angleMotor.set(angleOutput);
-
-        updateValues();
-    }
+    updateValues();
+}
 
     public double driveEncoderToMeters(double encoderPosition) {
-        return Math.round(encoderPosition * (Math.PI * WHEEL_DIAMETER_INCHES) / DRIVE_GEAR_RATIO / 39.37 * 100) / 100;
+        return encoderPosition * (Math.PI * WHEEL_DIAMETER_INCHES) / DRIVE_GEAR_RATIO / 39.37;
     }
 
     public int angleEncoderToDegrees(double encoderPosition) {

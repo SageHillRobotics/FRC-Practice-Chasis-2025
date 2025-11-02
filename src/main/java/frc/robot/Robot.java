@@ -51,12 +51,7 @@ public class Robot extends TimedRobot {
     if (m_controller.getRightBumperButton()) motor = "FR";
     if (m_controller.getLeftTriggerAxis() > 0.8) motor = "BL";
     if (m_controller.getRightTriggerAxis() > 0.8) motor = "BR";
-    m_swerve.move(m_controller.getRightX(), m_controller.getLeftY(), motor);
-
-    if (m_timer.hasElapsed(1)) {
-      m_swerve.logEncoders();
-      m_timer.reset();
-    }
+    m_swerve.move(m_controller.getRightX(), -m_controller.getLeftY(), motor);
   }
 
   @Override
