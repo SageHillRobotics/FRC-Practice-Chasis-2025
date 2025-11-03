@@ -42,9 +42,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    double x1 = -m_controller.getLeftY(); // Forward/backward
-    double y1 = -m_controller.getLeftX(); // Left/right
-    double x2 = -m_controller.getRightX(); // Rotation
+    double x1 = m_controller.getLeftY(); // Forward/Backward
+    double y1 = m_controller.getLeftX(); // Left/Right
+    double x2 = m_controller.getRightX(); // Rotation
 
     m_swerveDrive.drive(x1, y1, x2);
   }

@@ -17,7 +17,10 @@ public class SwerveDrive {
     };
 
     public void drive(double x1, double y1, double x2) {
-        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(x1, y1, x2);
+        drive(new ChassisSpeeds(x1, y1, x2));
+    }
+
+    public void drive(ChassisSpeeds chassisSpeeds) {
         SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
             new Translation2d(0.5, 0.5), // Front left
             new Translation2d(0.5, -0.5), // Front right
