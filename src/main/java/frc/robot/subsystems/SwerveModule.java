@@ -4,13 +4,13 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 
 public class SwerveModule {
-    public static final double WHEEL_DIAMETER_INCHES = 4;
-    public static final double WHEEL_CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER_INCHES / 39.37;
+    public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
     public static final double DRIVE_GEAR_RATIO = 6.86;
     public static final double STEER_GEAR_RATIO = 150.0 / 7.0;
 
@@ -34,8 +34,7 @@ public class SwerveModule {
         this.driveEncoder = driveMotor.getEncoder();
         this.steerEncoder = steerMotor.getEncoder();
 
-        this.driveEncoder.setPosition(0);
-        this.steerEncoder.setPosition(0);
+        resetEncoders();
 
         this.velocityPID = new PIDController(1, 0, 0);
         this.anglePID = new PIDController(1, 0, 0);
@@ -43,30 +42,56 @@ public class SwerveModule {
         this.anglePID.enableContinuousInput(-Math.PI, Math.PI);
     }
 
+    public SwerveModuleState getState() {
+        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getSteerPosition()));
+    }
+
     public void setDesiredState(SwerveModuleState state) {
-        double currentSpeed = getCurrentSpeedMetersPerSecond();
-        double currentAngle = getCurrentAngleRadians();
+        state.optimize(new Rotation2d(getSteerPosition()));
 
-        double targetSpeed = state.speedMetersPerSecond;
-        double targetAngle = state.angle.getRadians();
-
-        double velocityOutput = MathUtil.clamp(velocityPID.calculate(currentSpeed, targetSpeed), -1.0, 1.0);
-        double angleOutput = MathUtil.clamp(anglePID.calculate(currentAngle, targetAngle), -1.0, 1.0);
-
-        steerMotor.set(angleOutput);
-        driveMotor.set(velocityOutput);
+        driveMotor.set(velocityPID.calculate(getDriveVelocity(), state.speedMetersPerSecond));
+        steerMotor.set(anglePID.calculate(getSteerPosition(), state.angle.getRadians()));
     }
 
-    private double getCurrentSpeedMetersPerSecond() {
-        return driveEncoder.getVelocity() / DRIVE_GEAR_RATIO / 60.0 * WHEEL_CIRCUMFERENCE;
+    public double getDriveRot2Meters(double rotations) {
+        return (Math.PI * WHEEL_DIAMETER * rotations) / DRIVE_GEAR_RATIO;
     }
 
-    private double getDriveDistanceMeters() {
-        return driveEncoder.getPosition() / DRIVE_GEAR_RATIO * WHEEL_CIRCUMFERENCE;
+    public double getSteerRot2Rad(double rotations) {
+        return (2.0 * Math.PI * rotations) / STEER_GEAR_RATIO;
     }
 
-    private double getCurrentAngleRadians() {
-        double radians = steerEncoder.getPosition() / STEER_GEAR_RATIO * 2.0 * Math.PI;
-        return Math.atan2(Math.sin(radians), Math.cos(radians));
+    public double getDriveRPM2MetersPerSec(double rpm) {
+        return getDriveRot2Meters(rpm) / 60.0;
+    }
+
+    public double getSteerRPM2RadPerSec(double rpm) {
+        return getSteerRot2Rad(rpm) / 60.0;
+    }
+
+    public double getDrivePosition() {
+        return getDriveRot2Meters(driveEncoder.getPosition());
+    }
+
+    public double getSteerPosition() {
+        return getSteerRot2Rad(steerEncoder.getPosition());
+    }
+
+    public double getDriveVelocity() {
+        return getDriveRPM2MetersPerSec(driveEncoder.getVelocity());
+    }
+
+    public double getSteerVelocity() {
+        return getSteerRPM2RadPerSec(steerEncoder.getVelocity());
+    }
+
+    public void resetEncoders() {
+        driveEncoder.setPosition(0);
+        steerEncoder.setPosition(0);
+    }
+
+    public void stop() {
+        driveMotor.set(0);
+        steerMotor.set(0);
     }
 }
