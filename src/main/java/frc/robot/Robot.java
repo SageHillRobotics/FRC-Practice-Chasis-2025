@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     // TODO: Invert values if necessary
-    swerveSubsystem.setDefaultCommand(new SwerveJoystickCommand(swerveSubsystem, () -> -controller.getLeftY(), () -> controller.getLeftX(), () -> controller.getRightX()));
+    swerveSubsystem.setDefaultCommand(new SwerveJoystickCommand(swerveSubsystem, () -> -controller.getLeftY(), () -> -controller.getLeftX(), () -> -controller.getRightX()));
   }
 
   @Override
