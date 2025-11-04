@@ -13,7 +13,9 @@ public class SwerveModule {
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
     public static final double DRIVE_GEAR_RATIO = 6.86;
     public static final double STEER_GEAR_RATIO = 150.0 / 7.0;
-
+    public static final double MAX_DRIVE_SPEED = 5676.0 / DRIVE_GEAR_RATIO * Math.PI * WHEEL_DIAMETER / 60.0;
+    public static final double MAX_STEER_SPEED = MAX_DRIVE_SPEED / Math.hypot(SwerveSubsystem.CHASSIS_LENGTH / 2.0, SwerveSubsystem.CHASSIS_WIDTH / 2.0); // TODO: ChatGPT math may need update
+    
     private int id;
 
     private SparkMax driveMotor;
@@ -36,8 +38,8 @@ public class SwerveModule {
 
         resetEncoders();
 
-        this.velocityPID = new PIDController(1, 0, 0);
-        this.anglePID = new PIDController(1, 0, 0);
+        this.velocityPID = new PIDController(0.1, 0, 0);
+        this.anglePID = new PIDController(0.1, 0, 0);
 
         this.anglePID.enableContinuousInput(-Math.PI, Math.PI);
     }
@@ -47,7 +49,7 @@ public class SwerveModule {
     }
 
     public void setDesiredState(SwerveModuleState state) {
-        state.optimize(new Rotation2d(getSteerPosition()));
+        state = SwerveModuleState.optimize(state, new Rotation2d(getSteerPosition()));
 
         driveMotor.set(velocityPID.calculate(getDriveVelocity(), state.speedMetersPerSecond));
         steerMotor.set(anglePID.calculate(getSteerPosition(), state.angle.getRadians()));

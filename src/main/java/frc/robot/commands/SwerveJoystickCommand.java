@@ -1,43 +1,47 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Translation2d;
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.SwerveModule;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class SwerveJoystickCommand extends Command {
     public static final double DEADBAND = 0.05;
 
     private final SwerveSubsystem swerveSubsystem;
-    private final double m_xSpd;
-    private final double m_ySpd;
-    private final double m_steerSpd;
 
-    public SwerveJoystickCommand(SwerveSubsystem swerveSubsystem, double xSpd, double ySpd, double steerSpd) {
+    private final Supplier<Double> xSupplier;
+    private final Supplier<Double> ySupplier;
+    private final Supplier<Double> steerSupplier;
+
+    public SwerveJoystickCommand(SwerveSubsystem swerveSubsystem, Supplier<Double> xSupplier, Supplier<Double> ySupplier, Supplier<Double> steerSupplier) {
         this.swerveSubsystem = swerveSubsystem;
-        this.m_xSpd = xSpd;
-        this.m_ySpd = ySpd;
-        this.m_steerSpd = steerSpd;
+        this.xSupplier = xSupplier;
+        this.ySupplier = ySupplier;
+        this.steerSupplier = steerSupplier;
         addRequirements(swerveSubsystem);
     }
 
     @Override
     public void execute() {
-        double xSpd = Math.abs(this.m_xSpd) > DEADBAND ? this.m_xSpd : 0.0;
-        double ySpd = Math.abs(this.m_ySpd) > DEADBAND ? this.m_ySpd : 0.0;
-        double steerSpd = Math.abs(this.m_steerSpd) > DEADBAND ? this.m_steerSpd : 0.0;
+        double xSpd = this.xSupplier.get();
+        double ySpd = this.ySupplier.get();
+        double steerSpd = this.steerSupplier.get();
 
-        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpd, ySpd, steerSpd);
-        SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-            new Translation2d(Units.inchesToMeters(20), -Units.inchesToMeters(20)),
-            new Translation2d(Units.inchesToMeters(20), Units.inchesToMeters(20)),
-            new Translation2d(-Units.inchesToMeters(20), -Units.inchesToMeters(20)),
-            new Translation2d(-Units.inchesToMeters(20), Units.inchesToMeters(20))
-        );
+        xSpd = Math.abs(xSpd) > DEADBAND ? xSpd : 0.0;
+        ySpd = Math.abs(ySpd) > DEADBAND ? ySpd : 0.0;
+        steerSpd = Math.abs(steerSpd) > DEADBAND ? steerSpd : 0.0;
 
-        swerveSubsystem.setModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
+        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpd * SwerveModule.MAX_DRIVE_SPEED, ySpd * SwerveModule.MAX_DRIVE_SPEED, steerSpd * SwerveModule.MAX_STEER_SPEED);
+        SwerveDriveKinematics kinematics = swerveSubsystem.getKinematics();
+
+        SwerveModuleState[] states = kinematics.toSwerveModuleStates(chassisSpeeds);
+        SwerveDriveKinematics.desaturateWheelSpeeds(states, SwerveModule.MAX_DRIVE_SPEED);
+        swerveSubsystem.setModuleStates(states);
     }
 
     @Override
