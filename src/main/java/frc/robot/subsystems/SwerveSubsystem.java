@@ -18,10 +18,10 @@ public class SwerveSubsystem extends SubsystemBase {
     };
 
     private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-        new Translation2d( CHASSIS_LENGTH / 2,  CHASSIS_WIDTH / 2),
         new Translation2d( CHASSIS_LENGTH / 2, -CHASSIS_WIDTH / 2),
-        new Translation2d(-CHASSIS_LENGTH / 2,  CHASSIS_WIDTH / 2),
-        new Translation2d(-CHASSIS_LENGTH / 2, -CHASSIS_WIDTH / 2)
+        new Translation2d( CHASSIS_LENGTH / 2,  CHASSIS_WIDTH / 2),
+        new Translation2d(-CHASSIS_LENGTH / 2, -CHASSIS_WIDTH / 2),
+        new Translation2d(-CHASSIS_LENGTH / 2,  CHASSIS_WIDTH / 2)
     );    
 
     public SwerveDriveKinematics getKinematics() {
