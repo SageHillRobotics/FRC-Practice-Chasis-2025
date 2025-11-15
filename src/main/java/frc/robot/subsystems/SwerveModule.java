@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -26,12 +24,10 @@ public class SwerveModule {
     private RelativeEncoder driveEncoder;
     private RelativeEncoder steerEncoder;
 
-    private CANcoder canCoder;
-
     private PIDController velocityPID;
     private PIDController anglePID;
 
-    public SwerveModule(int id, int driveMotorId, int steerMotorId, int canCoderId, boolean driveReversed, boolean steerReversed) {
+    public SwerveModule(int id, int driveMotorId, int steerMotorId, boolean driveReversed, boolean steerReversed) {
         this.id = id;
 
         this.driveMotor = new SparkMax(driveMotorId, MotorType.kBrushless);
@@ -43,12 +39,11 @@ public class SwerveModule {
         this.driveEncoder = driveMotor.getEncoder();
         this.steerEncoder = steerMotor.getEncoder();
 
-        this.canCoder = new CANcoder(canCoderId);
-        this.canCoder.getConfigurator().apply(new CANcoderConfiguration());
         resetEncoders();
 
         this.velocityPID = new PIDController(0.1, 0, 0);
         this.anglePID = new PIDController(0.1, 0, 0);
+
         this.anglePID.enableContinuousInput(-Math.PI, Math.PI);
     }
 
@@ -95,13 +90,9 @@ public class SwerveModule {
         return getSteerRPM2RadPerSec(steerEncoder.getVelocity());
     }
 
-    public double getCanCoderRotation() {
-        return canCoder.getAbsolutePosition().getValueAsDouble();
-    }
-
     public void resetEncoders() {
         driveEncoder.setPosition(0);
-        steerEncoder.setPosition(getCanCoderRotation() * STEER_GEAR_RATIO);
+        steerEncoder.setPosition(0);
     }
 
     public void stop() {
