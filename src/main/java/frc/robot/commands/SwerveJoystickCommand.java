@@ -10,7 +10,8 @@ import frc.robot.subsystems.SwerveModule;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class SwerveJoystickCommand extends Command {
-    public static final double DEADBAND = 0.05;
+    public static final double MAX_SPEED = 4.0;
+    public static final double DEADBAND = 0.1;
 
     private final SwerveSubsystem swerveSubsystem;
 
@@ -36,11 +37,11 @@ public class SwerveJoystickCommand extends Command {
         ySpd = Math.abs(ySpd) > DEADBAND ? ySpd : 0.0;
         steerSpd = Math.abs(steerSpd) > DEADBAND ? steerSpd : 0.0;
 
-        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpd * SwerveModule.MAX_DRIVE_SPEED, ySpd * SwerveModule.MAX_DRIVE_SPEED, steerSpd * SwerveModule.MAX_STEER_SPEED);
+        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpd * MAX_SPEED, ySpd * MAX_SPEED, steerSpd * MAX_SPEED);
         SwerveDriveKinematics kinematics = swerveSubsystem.getKinematics();
 
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(chassisSpeeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(states, SwerveModule.MAX_DRIVE_SPEED);
+        SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_SPEED);
         swerveSubsystem.setModuleStates(states);
     }
 

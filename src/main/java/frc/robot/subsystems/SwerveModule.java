@@ -1,5 +1,10 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CANcoderConfigurator;
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -13,8 +18,6 @@ public class SwerveModule {
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
     public static final double DRIVE_GEAR_RATIO = 6.86;
     public static final double STEER_GEAR_RATIO = 150.0 / 7.0;
-    public static final double MAX_DRIVE_SPEED = 5676.0 / DRIVE_GEAR_RATIO * Math.PI * WHEEL_DIAMETER / 60.0;
-    public static final double MAX_STEER_SPEED = MAX_DRIVE_SPEED / Math.hypot(SwerveSubsystem.CHASSIS_LENGTH / 2.0, SwerveSubsystem.CHASSIS_WIDTH / 2.0); // TODO: ChatGPT math may need update
     
     private int id;
 
@@ -23,28 +26,31 @@ public class SwerveModule {
 
     private RelativeEncoder driveEncoder;
     private RelativeEncoder steerEncoder;
+    
+    private CANcoder absoluteEncoder;
 
     private PIDController velocityPID;
     private PIDController anglePID;
 
-    public SwerveModule(int id, int driveMotorId, int steerMotorId, boolean driveReversed, boolean steerReversed) {
+    public SwerveModule(int id, int driveMotorId, int steerMotorId, int absoluteEncoderId, int absoluteEncoderOffset) {
         this.id = id;
 
         this.driveMotor = new SparkMax(driveMotorId, MotorType.kBrushless);
         this.steerMotor = new SparkMax(steerMotorId, MotorType.kBrushless);
 
-        this.driveMotor.setInverted(driveReversed);
-        this.steerMotor.setInverted(steerReversed);
-
         this.driveEncoder = driveMotor.getEncoder();
         this.steerEncoder = steerMotor.getEncoder();
 
-        resetEncoders();
+        this.absoluteEncoder = new CANcoder(absoluteEncoderId);
+        CANcoderConfigurator configurator = this.absoluteEncoder.getConfigurator();
+        configurator.apply(new CANcoderConfiguration());
+        configurator.apply(new MagnetSensorConfigs().withSensorDirection(SensorDirectionValue.CounterClockwise_Positive).withAbsoluteSensorDiscontinuityPoint(0.5).withMagnetOffset(absoluteEncoderOffset));
 
         this.velocityPID = new PIDController(0.1, 0, 0);
         this.anglePID = new PIDController(0.1, 0, 0);
-
         this.anglePID.enableContinuousInput(-Math.PI, Math.PI);
+
+        resetEncoders();
     }
 
     public SwerveModuleState getState() {
@@ -92,7 +98,7 @@ public class SwerveModule {
 
     public void resetEncoders() {
         driveEncoder.setPosition(0);
-        steerEncoder.setPosition(0);
+        steerEncoder.setPosition(absoluteEncoder.getAbsolutePosition().refresh().getValueAsDouble() * STEER_GEAR_RATIO);
     }
 
     public void stop() {
