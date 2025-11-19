@@ -11,10 +11,11 @@ public class SwerveSubsystem extends SubsystemBase {
     public static final double CHASSIS_LENGTH = Units.inchesToMeters(28);
 
     private SwerveModule[] swerveModules = new SwerveModule[]{
-        new SwerveModule(1, 2, 9),
-        new SwerveModule(3, 4, 10),
-        new SwerveModule(5, 6, 11),
-        new SwerveModule(7, 8, 12)
+        // TODO: invert motors if necessary
+        new SwerveModule(1, 2, 9, false, false),
+        new SwerveModule(3, 4, 10, false, false),
+        new SwerveModule(5, 6, 11, false, false),
+        new SwerveModule(7, 8, 12, false, false)
     };
 
     private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(

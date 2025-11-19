@@ -25,12 +25,15 @@ public class SwerveModule {
     private PIDController velocityPID;
     private PIDController anglePID;
 
-    public SwerveModule(int driveMotorId, int steerMotorId, int absoluteEncoderId) {
+    public SwerveModule(int driveMotorId, int steerMotorId, int absoluteEncoderId, boolean driveInverted, boolean steerInverted) {
         this.driveMotor = new SparkMax(driveMotorId, MotorType.kBrushless);
         this.steerMotor = new SparkMax(steerMotorId, MotorType.kBrushless);
 
         this.driveEncoder = driveMotor.getEncoder();
         this.absoluteEncoder = new CANcoder(absoluteEncoderId);
+
+        driveMotor.setInverted(driveInverted);
+        steerMotor.setInverted(steerInverted);
 
         this.velocityPID = new PIDController(0.1, 0, 0);
         this.anglePID = new PIDController(0.1, 0, 0);
