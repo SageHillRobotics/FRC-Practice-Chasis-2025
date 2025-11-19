@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -10,7 +11,6 @@ import frc.robot.subsystems.SwerveModule;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class SwerveJoystickCommand extends Command {
-    public static final double MAX_SPEED = 4.0;
     public static final double DEADBAND = 0.1;
 
     private final SwerveSubsystem swerveSubsystem;
@@ -33,25 +33,15 @@ public class SwerveJoystickCommand extends Command {
         double ySpd = this.ySupplier.get();
         double steerSpd = this.steerSupplier.get();
 
-        xSpd = Math.abs(xSpd) > DEADBAND ? xSpd : 0.0;
-        ySpd = Math.abs(ySpd) > DEADBAND ? ySpd : 0.0;
-        steerSpd = Math.abs(steerSpd) > DEADBAND ? steerSpd : 0.0;
+        xSpd = MathUtil.applyDeadband(xSpd, DEADBAND);
+        ySpd = MathUtil.applyDeadband(ySpd, DEADBAND);
+        steerSpd = MathUtil.applyDeadband(steerSpd, DEADBAND);
 
-        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpd * MAX_SPEED, ySpd * MAX_SPEED, steerSpd * MAX_SPEED);
+        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpd * SwerveModule.MAX_SPEED, ySpd * SwerveModule.MAX_SPEED, steerSpd * SwerveModule.MAX_SPEED);
         SwerveDriveKinematics kinematics = swerveSubsystem.getKinematics();
 
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(chassisSpeeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_SPEED);
+        SwerveDriveKinematics.desaturateWheelSpeeds(states, SwerveModule.MAX_SPEED);
         swerveSubsystem.setModuleStates(states);
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        swerveSubsystem.stopModules();
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
     }
 }

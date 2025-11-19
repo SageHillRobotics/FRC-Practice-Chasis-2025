@@ -7,15 +7,14 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SwerveSubsystem extends SubsystemBase {
-    public static final double CHASSIS_WIDTH = Units.inchesToMeters(40.0);
-    public static final double CHASSIS_LENGTH = Units.inchesToMeters(40.0);
+    public static final double CHASSIS_WIDTH = Units.inchesToMeters(28);
+    public static final double CHASSIS_LENGTH = Units.inchesToMeters(29);
 
     private SwerveModule[] swerveModules = new SwerveModule[]{
-        // TODO!: Update absolute encoder offsets
-        new SwerveModule(1, 1, 2, 9, 0),
-        new SwerveModule(2, 3, 4, 10, 0),
-        new SwerveModule(3, 5, 6, 11, 0),
-        new SwerveModule(4, 7, 8, 12, 0)
+        new SwerveModule(1, 2, 9),
+        new SwerveModule(3, 4, 10),
+        new SwerveModule(5, 6, 11),
+        new SwerveModule(7, 8, 12)
     };
 
     private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
@@ -32,12 +31,6 @@ public class SwerveSubsystem extends SubsystemBase {
     public void setModuleStates(SwerveModuleState[] states) {
         for (int i = 0; i < swerveModules.length; i++) {
             swerveModules[i].setDesiredState(states[i]);
-        }
-    }
-
-    public void stopModules() {
-        for (SwerveModule module : swerveModules) {
-            module.stop();
         }
     }
 }
