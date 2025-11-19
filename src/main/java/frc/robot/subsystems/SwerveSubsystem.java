@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SwerveSubsystem extends SubsystemBase {
     public static final double CHASSIS_WIDTH = Units.inchesToMeters(28);
-    public static final double CHASSIS_LENGTH = Units.inchesToMeters(29);
+    public static final double CHASSIS_LENGTH = Units.inchesToMeters(28);
 
     private SwerveModule[] swerveModules = new SwerveModule[]{
         new SwerveModule(1, 2, 9),
