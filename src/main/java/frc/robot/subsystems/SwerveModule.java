@@ -15,6 +15,7 @@ public class SwerveModule {
     public static final double DRIVE_GEAR_RATIO = 6.86;
     public static final double STEER_GEAR_RATIO = 150.0 / 7.0;
     public static final double MAX_SPEED = 4.0;
+    public static final double MAX_ANGULAR_SPEED = Math.PI;;
 
     private SparkMax driveMotor;
     private SparkMax steerMotor;
