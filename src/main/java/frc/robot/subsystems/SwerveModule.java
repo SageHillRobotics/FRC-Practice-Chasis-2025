@@ -21,17 +21,17 @@ public class SwerveModule {
     private SparkMax steerMotor;
 
     private RelativeEncoder driveEncoder;
-    private CANcoder absoluteEncoder;
+    private RelativeEncoder steerEncoder;
 
     private PIDController velocityPID;
     private PIDController anglePID;
 
-    public SwerveModule(int driveMotorId, int steerMotorId, int absoluteEncoderId, boolean driveInverted, boolean steerInverted) {
+    public SwerveModule(int driveMotorId, int steerMotorId, boolean driveInverted, boolean steerInverted) {
         this.driveMotor = new SparkMax(driveMotorId, MotorType.kBrushless);
         this.steerMotor = new SparkMax(steerMotorId, MotorType.kBrushless);
 
         this.driveEncoder = driveMotor.getEncoder();
-        this.absoluteEncoder = new CANcoder(absoluteEncoderId);
+        this.steerEncoder = steerMotor.getEncoder();
 
         driveMotor.setInverted(driveInverted);
         steerMotor.setInverted(steerInverted);
@@ -41,6 +41,7 @@ public class SwerveModule {
         this.anglePID.enableContinuousInput(-Math.PI, Math.PI);
 
         driveEncoder.setPosition(0);
+        steerEncoder.setPosition(0);
     }
 
     public SwerveModuleState getState() {
@@ -55,7 +56,7 @@ public class SwerveModule {
     }
 
     public double getDriveRot2Meters(double rotations) {
-        return (Math.PI * WHEEL_DIAMETER * rotations) / DRIVE_GEAR_RATIO;
+        return Math.PI * WHEEL_DIAMETER * rotations / DRIVE_GEAR_RATIO;
     }
 
     public double getDriveRPM2MetersPerSec(double rpm) {
@@ -71,6 +72,6 @@ public class SwerveModule {
     }
 
     public double getSteerPosition() {
-        return absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI;
+        return steerEncoder.getPosition() / STEER_GEAR_RATIO * 2.0 * Math.PI;
     }
 }

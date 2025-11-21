@@ -15,10 +15,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private SwerveModule[] swerveModules = new SwerveModule[]{
         // TODO: invert motors if necessary
-        new SwerveModule(1, 2, 9, false, false),
-        new SwerveModule(3, 4, 10, false, false),
-        new SwerveModule(5, 6, 11, false, false),
-        new SwerveModule(7, 8, 12, false, false)
+        new SwerveModule(1, 2, false, false),
+        new SwerveModule(3, 4, false, false),
+        new SwerveModule(5, 6, false, false),
+        new SwerveModule(7, 8, false, false)
     };
 
     private Pigeon2 pigeon = new Pigeon2(13);
