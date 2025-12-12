@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -14,8 +13,8 @@ public class SwerveModule {
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
     public static final double DRIVE_GEAR_RATIO = 6.86;
     public static final double STEER_GEAR_RATIO = 150.0 / 7.0;
-    public static final double MAX_SPEED = 4.0;
-    public static final double MAX_ANGULAR_SPEED = Math.PI;;
+    public static final double MAX_SPEED = 3.0;
+    public static final double MAX_ANGULAR_SPEED = Math.PI;
 
     private SparkMax driveMotor;
     private SparkMax steerMotor;

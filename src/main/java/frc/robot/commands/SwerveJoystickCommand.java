@@ -41,7 +41,7 @@ public class SwerveJoystickCommand extends Command {
         steerSpd = MathUtil.applyDeadband(steerSpd, DEADBAND);
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpd * SwerveModule.MAX_SPEED, ySpd * SwerveModule.MAX_SPEED, steerSpd * SwerveModule.MAX_ANGULAR_SPEED);
-        if (fieldRelativeSupplier.get()) {
+        if (!fieldRelativeSupplier.get()) {
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, Rotation2d.fromRadians(swerveSubsystem.getHeading()));
         }
         
